@@ -18,7 +18,7 @@ class ProductManager {
         const productValues = Object.values(product)
         console.log("productValues", productValues)
 
-        productValues.map((value) => {
+        productValues.forEach((value) => {
             if (String(value).trim().length === 0) {
                 throw new Error("Completa todos los campos para continuar")
             }
