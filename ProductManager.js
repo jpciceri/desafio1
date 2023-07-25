@@ -1,4 +1,5 @@
-const fs = require("fs").promises;
+// const fs = require("fs").promises;
+import { promises } from "fs";
 
 class ProductManager {
 
@@ -38,26 +39,26 @@ class ProductManager {
         })
         this.id = this.id + 1;
 
-        await fs.writeFile(this.path, JSON.stringify(this.products))
+        await promises.writeFile(this.path, JSON.stringify(this.products))
         return "Su producto se creó con exito"
     }
 
     async getProduct() {
         try {
-            const products = await fs.readFile(this.path, {
+            const products = await promises.readFile(this.path, {
                 encoding: "utf-8"
             });
             return JSON.parse(products);
         } catch (error) {
             console.log(`El archivo ${this.path} no existe, creando...`);
-            await fs.writeFile(this.path, "[]");
+            await promises.writeFile(this.path, "[]");
             return [];
         }
     }
 
     async getProductById(productId) {
         try {
-            const products = await fs.readFile(this.path, {
+            const products = await promises.readFile(this.path, {
                 encoding: "utf-8"
             });
             const productParsed = JSON.parse(products);
@@ -78,7 +79,7 @@ class ProductManager {
             if (productToUpdate) {
                 const filterProducts = this.products.filter((product) => product.id !== productToUpdate.id);
                 this.products.push([...filterProducts, Object.assign(productToUpdate, product)]);
-                await fs.writeFile(this.path, JSON.stringify(this.products));
+                await promises.writeFile(this.path, JSON.stringify(this.products));
                 return productToUpdate;
             }
         } catch (error) {
@@ -92,7 +93,7 @@ class ProductManager {
             const productsDeleted = this.products.filter(
                 (product) => product.id !== productToDelete.id
             );
-            await fs.writeFile(this.path, JSON.stringify(productsDeleted));
+            await promises.writeFile(this.path, JSON.stringify(productsDeleted));
         } catch (error) {
             throw new Error("No se pudo borrar el producto");
         }
@@ -149,3 +150,5 @@ await newProduct.addProduct({
 }
 
 main();
+
+export default ProductManager;
