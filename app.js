@@ -96,7 +96,7 @@ main()
 
 
 app.get("/products", async (req, res) => {
-    let productsParsed = await productManagerServer.getProducts()
+    let productsParsed = await productManagerServer.getProduct()
     let limit = req.query.limit || 10;
     const productsLimit = productsParsed.slice(0, limit);
 
