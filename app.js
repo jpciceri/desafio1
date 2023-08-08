@@ -1,39 +1,54 @@
 import express from "express";
-import handlebars from 'express-handlebars';
-import __dirname from "./utils.js";
-import productRouter from "./src/routes/productRouter.js";
-import cartsRouter from "./src/routes/cartsRouter.js";
-import {
-    Server
-} from "socket.io";
+import viewRouter from "./rutas/view.router.js";
+import cartRouter from "./rutas/carts.router.js";
+import productsRouter from "./rutas/products.router.js";
+import  __dirname  from "./utils.js";
+import handlebars from "express-handlebars";
+import { Server, Socket } from "socket.io";
 
 const app = express();
-const puerto = 8080;
+const puerto =8080;
 
-const httpServer = app.listen(puerto, () => {
-    console.log("Servidor activo en el puerto: " + puerto);
+console.log(__dirname);
+
+app.use(express.json());
+app.use(express.urlencoded({extended:true}));
+app.use(express.static(__dirname+"/public"))
+
+app.engine("handlebars", handlebars.engine());
+app.set("view engine","handlebars");
+app.set("views", __dirname+"/views")
+
+app.use("/api", cartRouter);
+app.use("/api", productsRouter);
+app.use("/", viewRouter);
+
+
+const httpServer=app.listen(puerto, () => {
+    console.log("Servidor Activo en el puerto: " + puerto);
 });
 
 const socketServer = new Server(httpServer);
 
-app.engine("handlebars", handlebars.engine());
-app.set("views", __dirname + "/views");
-app.set("view engine", "handlebars");
-app.use(express.static(__dirname + "/public"));
+import ProductManager from "./managers/productmanager.js";
+const PM = new ProductManager(__dirname+"/files/products.json");
 
-app.use(express.json());
-app.use(express.urlencoded({
-    extended: true
-}));
-app.use("/api/products/", productRouter);
-app.use("/api/carts/", cartsRouter);
-socketServer.on("connection", (socket) => {
-    console.log("Un cliente se ha conectado");
-    socket.on("message", (data) => {
-        console.log(data);
+//Primero recibe una nueva coneccion de usuario y da un ID para este, luego permite desde el formulario agregar o quitar productos de la lista
+socketServer.on("connection", async (socket)=>{
+    console.log("Cliente conectado con ID: ", socket.id);
+    const listadeproductos = await PM.getProducts({});
+    socketServer.emit("envioDeProductos", listadeproductos);
+
+    socket.on("addProduct", async(obj)=>{
+        await PM.addProduct(obj);
+        const listadeproductos = await PM.getProducts({});
+        socketServer.emit("envioDeProductos", listadeproductos);    
     });
-
-    socket.emit("socket_individual", "Hola desde el cliente #1");
+    
+    socket.on("deleteProduct",async(id)=>{
+        console.log(id)
+        await PM.deleteProduct(id)
+        const listadeproductos=await PM.getProducts({})
+        socketServer.emit("envioDeProducts",listadeproductos)
+        })
 });
-
-
