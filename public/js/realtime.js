@@ -19,6 +19,9 @@ function updateProductList(products){
                      <div class="contentBx">
                      <h2>${product.title}</h2>
                      <div class="size">
+                     <h3>ID:${product.id}</h3>
+                     </div>
+                     <div class="size">
                      <h3>${product.description}</h3>
                      </div>
                      <div class="color">
