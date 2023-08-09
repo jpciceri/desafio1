@@ -33,7 +33,6 @@ const socketServer = new Server(httpServer);
 import ProductManager from "./managers/productmanager.js";
 const PM = new ProductManager(__dirname+"/files/products.json");
 
-//Primero recibe una nueva coneccion de usuario y da un ID para este, luego permite desde el formulario agregar o quitar productos de la lista
 socketServer.on("connection", async (socket)=>{
     console.log("Cliente conectado con ID: ", socket.id);
     const listadeproductos = await PM.getProducts({});

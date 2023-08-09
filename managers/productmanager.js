@@ -9,13 +9,12 @@ export default class ProductManager {
 
     }
 
-    //Muestra los objetos en el json y determina el limite 
     getProducts = async (info) => {
         const productList = await fs.promises.readFile(this.path, "utf-8")
         const productListParse = JSON.parse(productList)
         return productListParse
     }
-    //Consigue el id
+
     getId = async () => {
         if (fs.existsSync(this.path)) {
             const listP = await this.getProducts({});
