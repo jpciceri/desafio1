@@ -1,26 +1,23 @@
-{{#each listaProductos}}
-<article class="container">
-    <div class="row">
-        <div class="col-md-4">
-            <div class="card">
-                <div class="imgBx">
-                    <img src={{thumbnail}} width="150" />
-                </div>
-                <div class="contentBx">
-                    <h3>{{title}}</h3>
-                    <div class="size">
-                        <h4>{{description}}</h4>
-                    </div>
-                    <div class="size">
-                        <h4>ID:{{id}}</h4>
-                    </div>
-                    <div class="color">
-                        <h4>${{price}}</h4>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-</article>
-{{/each}}
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/src/public/css/style.css">
+  <title>Lista de Productos</title>
+</head>
+<body>
+ <div class="container" id="home-color">
+  <div class="search-bar">
+</div>
+      <h1>Relojes Casio</h1>
+      <ul class="lista-productos">
+        {{#each products.payload}}
+          <div class="product"><img src={{this.thumbnails}}><a href="/products/{{this._id}}"><li>Nombre: {{this.title}}</li></a></div>
+        {{/each}}
+      </ul>
+</div>
+</body>
+</html>
+<script src="socket.io/socket.io.js"></script>
+<script src="/index.js"></script>
