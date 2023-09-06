@@ -10,6 +10,7 @@ import viewsRouter from "./src/routes/views.routes.js";
 import { messageModel } from "./src/dao/models/message.model.js";
 import ProductManager from "./src/dao/ProductManager.js";
 import { allowInsecurePrototypeAccess } from "@handlebars/allow-prototype-access";
+import sessionsRouter from "./src/routes/sessions.routes.js";
 
 const app = express();
 const port = 8080;
@@ -36,6 +37,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/products/", productsRouter);
 app.use("/api/carts/", cartsRouter);
+app.use("/api/sessions/", sessionsRouter);
 app.use("/", viewsRouter);
 
 const PM = new ProductManager();
