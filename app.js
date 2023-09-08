@@ -11,6 +11,12 @@ import { messageModel } from "./src/dao/models/message.model.js";
 import ProductManager from "./src/dao/ProductManager.js";
 import { allowInsecurePrototypeAccess } from "@handlebars/allow-prototype-access";
 import sessionsRouter from "./src/routes/sessions.routes.js";
+import session from "express-session";
+import MongoStore from "connect-mongo";
+//import { session } from "passport"; 
+//import passport from "passport";
+//import initializePassport from "./src/config/passport.config.js";
+
 
 const app = express();
 const port = 8080;
@@ -34,6 +40,16 @@ app.use(express.static(__dirname));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(session({
+  secret: 'M5E7',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false },
+  store: MongoStore.create({ 
+    mongoUrl: "mongodb+srv://juanpc87:juan123@codercluster.xxnkdzq.mongodb.net/ecommerce?retryWrites=true&w=majority",
+    collectionName: 'sessions'
+  })
+}));
 
 app.use("/api/products/", productsRouter);
 app.use("/api/carts/", cartsRouter);
