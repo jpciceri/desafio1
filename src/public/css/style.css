@@ -142,3 +142,14 @@ img {
     padding: 10px;
     box-shadow: 5px 5px;
 }
+
+.form {
+    padding: 10px;
+}
+#btn-productos{
+    padding: 10px;
+}
+
+#cambiar-clave{
+    padding: 10px;
+}

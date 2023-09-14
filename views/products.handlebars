@@ -17,7 +17,9 @@
 <div class="text-center">
     <p style="font-size: 24px">Bienvenido</p>
     <p>{{user.role}} {{user.first_name}} {{user.last_name}}</p>
-
+    <form action="/profile" method="GET">
+        <button type="submit" class="btn btn-primary">Profile</button>
+    </form>
     <form action="/api/sessions/logout" method="POST">
         <button type="submit" class="btn btn-primary">Logout</button>
     </form>
@@ -45,7 +47,7 @@
                     {{#if products.hasPrevPage}}
                     <li class="page-item">
                         <a class="page-link" href="{{products.prevLink}}">
-                            <<< /a>
+                            <<< </a>
                     </li>
                     {{/if}}
                     {{#if products.hasPrevPage}}

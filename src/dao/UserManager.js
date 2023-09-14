@@ -1,30 +1,31 @@
+import userModel from "./models/user.model.js";
 import {
-    userModel
-} from "./models/user.model.js";
+    isValidPassword
+} from "../../utils.js";
 
 class UserManager {
     async addUser(user) {
         try {
-            user.role = "user"
-            await userModel.create(user)
+            if (user.email == "adminCoder@coder.com") {
+                user.role = "admin";
+            }
+
+            await userModel.create(user);
             console.log("User added!");
 
             return true;
         } catch (error) {
-            console.error("Error durante el register:", error);
             return false;
         }
     }
 
     async login(user, pass, req) {
         try {
-            const userLogged =
-                (await userModel.findOne({
-                    email: user,
-                    password: pass
-                })) || null;
+            const userLogged = await userModel.findOne({
+                email: user
+            });
 
-            if (userLogged) {
+            if (userLogged && isValidPassword(userLogged, pass)) {
                 const role =
                     userLogged.email === "adminCoder@coder.com" ? "admin" : "usuario";
 
@@ -35,6 +36,7 @@ class UserManager {
                     last_name: userLogged.last_name,
                     role: role,
                 };
+
                 const userToReturn = userLogged;
                 return userToReturn;
             }

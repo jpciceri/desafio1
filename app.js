@@ -13,9 +13,9 @@ import { allowInsecurePrototypeAccess } from "@handlebars/allow-prototype-access
 import sessionsRouter from "./src/routes/sessions.routes.js";
 import session from "express-session";
 import MongoStore from "connect-mongo";
-//import { session } from "passport"; 
-//import passport from "passport";
-//import initializePassport from "./src/config/passport.config.js";
+import passport from "passport";
+import initializePassport from "./src/config/passport.config.js";
+
 
 
 const app = express();
@@ -47,9 +47,14 @@ app.use(session({
   cookie: { secure: false },
   store: MongoStore.create({ 
     mongoUrl: "mongodb+srv://juanpc87:juan123@codercluster.xxnkdzq.mongodb.net/ecommerce?retryWrites=true&w=majority",
+    mongoOptions:{useNewUrlParser:true, useUnifiedTopology:true},
     collectionName: 'sessions'
   })
 }));
+
+app.use(passport.initialize());
+app.use(passport.session());
+initializePassport();
 
 app.use("/api/products/", productsRouter);
 app.use("/api/carts/", cartsRouter);
